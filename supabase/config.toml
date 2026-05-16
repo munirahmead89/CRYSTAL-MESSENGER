@@ -1,0 +1,32 @@
+[project]
+name = "crystal-messenger"
+plan = "free"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://crystal-messenger.app/*"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.sms]
+enable_signup = true
+provider = "twilio"
+
+[auth.sms.twilio]
+account_sid = "env(TWILIO_ACCOUNT_SID)"
+auth_token = "env(TWILIO_AUTH_TOKEN)"
+message_service_sid = "env(TWILIO_MESSAGE_SERVICE_SID)"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public"]
+
+[db]
+port = 54322
+major_version = 15
+
+[realtime]
+enabled = true

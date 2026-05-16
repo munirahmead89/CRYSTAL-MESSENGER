@@ -1,0 +1,42 @@
+name: crystal_messenger
+description: "Crystal Messenger - High-performance, pixel-perfect real-time communication system."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^3.3.1
+  go_router: ^17.2.3
+  path_provider: ^2.1.5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  supabase_flutter: ^2.12.4
+  flutter_dotenv: ^6.0.1
+  flutter_local_notifications: ^18.0.1
+  google_fonts: ^6.2.1
+  glassmorphism_ui: ^0.3.0
+  flutter_animate: ^4.5.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/sounds/
+    - .env
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21

@@ -1,0 +1,5 @@
+{
+  "apiBaseUrl": "",
+  "wsUrl": "",
+  "note": "Set apiBaseUrl to your reachable server (e.g. http://192.168.1.10:8080) before release builds. Leave wsUrl empty to derive wss/ws from apiBaseUrl."
+}

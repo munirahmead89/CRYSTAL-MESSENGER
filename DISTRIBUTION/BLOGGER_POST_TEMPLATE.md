@@ -1,0 +1,204 @@
+# Crystal Messenger - Official Launch Post
+
+Copy the content below into your Blogger "HTML View" to create a premium download page.
+
+---
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Crystal Messenger - Premium Ephemeral Messaging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #075E54;
+            --accent: #25D366;
+            --dark: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--dark);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(7, 94, 84, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        header { text-align: center; margin-bottom: 80px; }
+        
+        .logo-container {
+            width: 120px; height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 35px;
+            margin: 0 auto 30px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transform: rotate(-10deg);
+        }
+
+        h1 { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tagline { font-size: 1.5rem; color: #aaa; font-weight: 300; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feature-card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.06); border-color: var(--accent); }
+        .feature-card i { font-size: 40px; color: var(--accent); margin-bottom: 20px; display: block; }
+        .feature-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .feature-card p { color: #999; }
+
+        .download-section {
+            background: linear-gradient(135deg, rgba(7, 94, 84, 0.2), rgba(37, 211, 102, 0.05));
+            border-radius: 50px;
+            padding: 80px 40px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 60px;
+        }
+
+        .download-title { font-size: 2.5rem; margin-bottom: 40px; }
+
+        .btn-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            color: #000;
+            padding: 18px 35px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); background: var(--accent); color: #fff; }
+        .download-btn.secondary { background: var(--glass); color: #fff; border: 1px solid var(--glass-border); }
+        .download-btn.secondary:hover { background: #fff; color: #000; }
+
+        .info-panel {
+            background: var(--glass);
+            border-radius: 30px;
+            padding: 40px;
+            margin-top: 60px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 100px;
+            padding: 40px;
+            border-top: 1px solid var(--glass-border);
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <i class="fas fa-gem"></i>
+            </div>
+            <h1>Crystal Messenger</h1>
+            <p class="tagline">The world's most elegant ephemeral messaging system.</p>
+        </header>
+
+        <section class="feature-grid">
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>1-Hour Disappear</h3>
+                <p>Every message is temporary by default. Using Supabase edge triggers, your chats vanish completely after 1 hour of creation.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>End-to-End Style</h3>
+                <p>Powered by Supabase Row Level Security (RLS), only you and the intended recipient can ever see your private data.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Real-time Sync</h3>
+                <p>Experience zero latency. Messages, typing indicators, and online status sync instantly across all your devices.</p>
+            </div>
+        </section>
+
+        <section class="download-section">
+            <h2 class="download-title">Get Crystal Messenger Now</h2>
+            <div class="btn-grid">
+                <a href="YOUR_ANDROID_APK_LINK" class="download-btn">
+                    <i class="fab fa-android"></i>
+                    Android (APK)
+                </a>
+                <a href="YOUR_WINDOWS_EXE_LINK" class="download-btn secondary">
+                    <i class="fab fa-windows"></i>
+                    Windows (EXE)
+                </a>
+                <a href="YOUR_MACOS_DMG_LINK" class="download-btn secondary">
+                    <i class="fab fa-apple"></i>
+                    macOS (DMG)
+                </a>
+                <a href="YOUR_LINUX_LINK" class="download-btn secondary">
+                    <i class="fab fa-linux"></i>
+                    Linux (AppImage)
+                </a>
+            </div>
+            <p style="margin-top: 30px; color: #888;">Version 1.0.0 | Size: 45MB | Released: May 2026</p>
+        </section>
+
+        <div class="info-panel">
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-info-circle"></i> Installation Guide</h3>
+            <p style="color: #aaa; margin-bottom: 10px;">1. <strong>Android:</strong> Enable "Install from Unknown Sources" in your settings.</p>
+            <p style="color: #aaa; margin-bottom: 10px;">2. <strong>Windows:</strong> Run the installer and click "More Info" -> "Run anyway" if SmartScreen appears.</p>
+            <p style="color: #aaa;">3. <strong>macOS:</strong> Drag the app to your Applications folder and allow it in Security & Privacy settings.</p>
+        </div>
+
+        <div class="footer">
+            Designed and Developed by MUNIR WAHEED - THE FOUNDER OF CRYSTAL MESSENGER
+        </div>
+    </div>
+</body>
+</html>
+```
