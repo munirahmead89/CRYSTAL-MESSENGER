@@ -41,4 +41,7 @@ class HiveService {
   Future<void> saveSession(Map<String, dynamic> data) async => await profileBox.put('session', data);
   Map<String, dynamic>? getSession() => profileBox.get('session') != null ? Map<String, dynamic>.from(profileBox.get('session')) : null;
   Future<void> clearSession() async => await profileBox.delete('session');
+
+  Future<void> setProfileCompleted(bool completed) async => await profileBox.put('profile_completed', completed);
+  bool isProfileCompleted() => profileBox.get('profile_completed', defaultValue: false);
 }

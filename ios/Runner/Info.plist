@@ -46,5 +46,7 @@
 	<string>Crystal Messenger needs microphone access for voice messages and calls.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Crystal Messenger needs photo library access to share media.</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-5375584696804538~8182284522</string>
 </dict>
 </plist>
