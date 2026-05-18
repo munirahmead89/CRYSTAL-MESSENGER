@@ -56,7 +56,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
             child: GlassContainer(
               blur: 20,
               color: Colors.black.withValues(alpha: 0.8),
-              border: Border.all(color: const Color(0xFF25D366).withValues(alpha: 0.3), width: 1.5),
+              border: Border.all(
+                  color: const Color(0xFF25D366).withValues(alpha: 0.3),
+                  width: 1.5),
               borderRadius: BorderRadius.circular(30),
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -74,7 +76,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                         color: const Color(0xFF25D366),
                         size: 40,
                       ),
-                    ).animate().scale(duration: 500.ms, curve: Curves.easeOutBack),
+                    )
+                        .animate()
+                        .scale(duration: 500.ms, curve: Curves.easeOutBack),
                     const SizedBox(height: 20),
                     const Text(
                       'CRYSTAL P2P CALL',
@@ -87,13 +91,19 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      isVideo ? 'Incoming Video Call...' : 'Incoming Audio Call...',
-                      style: const TextStyle(color: Colors.white70, fontSize: 14),
+                      isVideo
+                          ? 'Incoming Video Call...'
+                          : 'Incoming Audio Call...',
+                      style:
+                          const TextStyle(color: Colors.white70, fontSize: 14),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Caller ID: ${call.callerId.substring(0, 8)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 30),
                     Row(
@@ -103,15 +113,18 @@ class _ChatListScreenState extends State<ChatListScreen> {
                         ElevatedButton.icon(
                           onPressed: () async {
                             Navigator.of(context).pop();
-                            await SupabaseService.updateCallStatus(call.id, CallStatus.rejected);
+                            await SupabaseService.updateCallStatus(
+                                call.id, CallStatus.rejected);
                           },
                           icon: const Icon(Icons.call_end, color: Colors.white),
                           label: const Text('DECLINE'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,
                             foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
                           ),
                         ),
                         // Accept Button (Green)
@@ -130,8 +143,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF25D366),
                             foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
                           ),
                         ),
                       ],
@@ -155,15 +170,18 @@ class _ChatListScreenState extends State<ChatListScreen> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFF075E54), Color(0xFF25D366)]),
+                gradient: const LinearGradient(
+                    colors: [Color(0xFF075E54), Color(0xFF25D366)]),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.diamond_outlined, color: Colors.white, size: 20),
+              child: const Icon(Icons.diamond_outlined,
+                  color: Colors.white, size: 20),
             ),
             const SizedBox(width: 10),
             const Text(
               'Crystal Messenger',
-              style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: -0.5),
+              style:
+                  TextStyle(fontWeight: FontWeight.w900, letterSpacing: -0.5),
             ),
           ],
         ),
@@ -202,10 +220,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             _searchQuery = val.toLowerCase();
                           });
                         },
-                        style: const TextStyle(color: Colors.white, fontSize: 15),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
                         decoration: const InputDecoration(
                           hintText: 'Search chats...',
-                          hintStyle: TextStyle(color: Colors.white30, fontSize: 15),
+                          hintStyle:
+                              TextStyle(color: Colors.white30, fontSize: 15),
                           border: InputBorder.none,
                           isDense: true,
                         ),
@@ -217,7 +237,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           _searchController.clear();
                           setState(() => _searchQuery = '');
                         },
-                        child: const Icon(Icons.clear, color: Colors.white54, size: 16),
+                        child: const Icon(Icons.clear,
+                            color: Colors.white54, size: 16),
                       ),
                   ],
                 ),
@@ -231,14 +252,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
               future: SupabaseService.getRooms(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator(color: Color(0xFF25D366)));
+                  return const Center(
+                      child:
+                          CircularProgressIndicator(color: Color(0xFF25D366)));
                 }
 
                 final rawRooms = snapshot.data ?? [];
                 var rooms = rawRooms.map((r) => RoomModel.fromJson(r)).toList();
 
                 if (_searchQuery.isNotEmpty) {
-                  rooms = rooms.where((r) => (r.name ?? 'Chat Room').toLowerCase().contains(_searchQuery)).toList();
+                  rooms = rooms
+                      .where((r) => (r.name ?? 'Chat Room')
+                          .toLowerCase()
+                          .contains(_searchQuery))
+                      .toList();
                 }
 
                 if (rooms.isEmpty) {
@@ -246,18 +273,25 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.chat_bubble_outline, size: 50, color: Colors.white24),
+                        const Icon(Icons.chat_bubble_outline,
+                            size: 50, color: Colors.white24),
                         const SizedBox(height: 16),
                         Text(
-                          _searchQuery.isNotEmpty ? 'No conversations found' : 'No chats yet',
-                          style: const TextStyle(color: Colors.white30, fontSize: 16, fontWeight: FontWeight.bold),
+                          _searchQuery.isNotEmpty
+                              ? 'No conversations found'
+                              : 'No chats yet',
+                          style: const TextStyle(
+                              color: Colors.white30,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          _searchQuery.isNotEmpty 
-                              ? 'Try refining your search keyword.' 
+                          _searchQuery.isNotEmpty
+                              ? 'Try refining your search keyword.'
                               : 'Tap the contact icon or button below to sync contacts and chat!',
-                          style: const TextStyle(color: Colors.white24, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white24, fontSize: 12),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -268,7 +302,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   itemCount: rooms.length,
-                  separatorBuilder: (c, idx) => const Divider(color: Colors.white10, height: 1, indent: 80),
+                  separatorBuilder: (c, idx) => const Divider(
+                      color: Colors.white10, height: 1, indent: 80),
                   itemBuilder: (context, index) {
                     final room = rooms[index];
                     return ListTile(
@@ -279,18 +314,23 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             ? NetworkImage(room.avatarUrl!)
                             : null,
                         child: room.avatarUrl == null
-                            ? const Icon(Icons.person, color: Colors.white38, size: 28)
+                            ? const Icon(Icons.person,
+                                color: Colors.white38, size: 28)
                             : null,
                       ),
                       title: Text(
                         room.name ?? 'Direct Chat (${room.id.substring(0, 6)})',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white),
                       ),
                       subtitle: Text(
                         room.lastMessage ?? 'No messages yet',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Color(0x80FFFFFF), fontSize: 13),
+                        style: const TextStyle(
+                            color: Color(0x80FFFFFF), fontSize: 13),
                       ),
                       trailing: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -298,10 +338,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
                         children: [
                           Text(
                             '${room.updatedAt.hour}:${room.updatedAt.minute.toString().padLeft(2, '0')}',
-                            style: const TextStyle(color: Colors.white30, fontSize: 11),
+                            style: const TextStyle(
+                                color: Colors.white30, fontSize: 11),
                           ),
                           const SizedBox(height: 4),
-                          const Icon(Icons.done_all, color: Color(0xFF25D366), size: 16), // Mock read status indicator
+                          const Icon(Icons.done_all,
+                              color: Color(0xFF25D366),
+                              size: 16), // Mock read status indicator
                         ],
                       ),
                       onTap: () => context.push('/chat/${room.id}'),

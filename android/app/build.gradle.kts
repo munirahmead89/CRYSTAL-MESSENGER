@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.crystalmessenger.app"
+    namespace = "com.example.crystal_messenger"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.crystalmessenger.app"
+        applicationId = "com.example.crystal_messenger"
         // flutter_webrtc, google_mobile_ads, and flutter_contacts require minSdk 21
         minSdk = flutter.minSdkVersion
         targetSdk = 35

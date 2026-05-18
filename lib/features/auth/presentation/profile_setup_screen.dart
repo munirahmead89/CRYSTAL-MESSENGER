@@ -4,6 +4,7 @@ import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:io';
+import '../../../core/services/admob_service.dart';
 import '../../../core/services/supabase_service.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,9 +18,10 @@ class ProfileSetupScreen extends StatefulWidget {
 class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
-  final _statusController = TextEditingController(text: 'Hey there! I am using Crystal Messenger.');
+  final _statusController =
+      TextEditingController(text: 'Hey there! I am using Crystal Messenger.');
   final _phoneController = TextEditingController();
-  
+
   File? _imageFile;
   bool _isLoading = false;
   final _picker = ImagePicker();
@@ -33,10 +35,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   Future<void> _loadExistingData() async {
     setState(() => _isLoading = true);
     final profile = await SupabaseService.getCurrentProfile();
+    if (!mounted) return;
     if (profile != null) {
       _fullNameController.text = profile['full_name'] ?? '';
       _usernameController.text = profile['username'] ?? '';
-      _statusController.text = profile['status'] ?? 'Hey there! I am using Crystal Messenger.';
+      _statusController.text =
+          profile['status'] ?? 'Hey there! I am using Crystal Messenger.';
       _phoneController.text = profile['phone'] ?? '';
     }
     setState(() => _isLoading = false);
@@ -44,7 +48,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
 
   Future<void> _pickImage() async {
     try {
-      final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+      final picked = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 70);
       if (picked != null) {
         setState(() {
           _imageFile = File(picked.path);
@@ -61,13 +66,17 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   Future<void> _saveProfile() async {
     if (_fullNameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Display name is required'), backgroundColor: Colors.redAccent),
+        const SnackBar(
+            content: Text('Display name is required'),
+            backgroundColor: Colors.redAccent),
       );
       return;
     }
     if (_usernameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Username is required'), backgroundColor: Colors.redAccent),
+        const SnackBar(
+            content: Text('Username is required'),
+            backgroundColor: Colors.redAccent),
       );
       return;
     }
@@ -92,17 +101,29 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       );
 
       if (mounted) {
+        AdMobService.instance.showInterstitialAd();
         context.go('/chat');
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving profile: $e'), backgroundColor: Colors.redAccent),
+          SnackBar(
+              content: Text('Error saving profile: $e'),
+              backgroundColor: Colors.redAccent),
         );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _usernameController.dispose();
+    _statusController.dispose();
+    _phoneController.dispose();
+    super.dispose();
   }
 
   @override
@@ -138,7 +159,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -157,7 +179,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                       style: TextStyle(color: Colors.white60, fontSize: 14),
                     ).animate().fadeIn(delay: 150.ms),
                     const SizedBox(height: 35),
-                    
+
                     // Profile Picture Selector
                     GestureDetector(
                       onTap: _isLoading ? null : _pickImage,
@@ -169,10 +191,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                             height: 130,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: const Color(0xFF25D366), width: 3),
+                              border: Border.all(
+                                  color: const Color(0xFF25D366), width: 3),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF25D366).withValues(alpha: 0.2),
+                                  color: const Color(0xFF25D366)
+                                      .withValues(alpha: 0.2),
                                   blurRadius: 15,
                                   spreadRadius: 2,
                                 )
@@ -206,7 +230,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           ),
                         ],
                       ),
-                    ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
+                    )
+                        .animate()
+                        .scale(duration: 400.ms, curve: Curves.easeOutBack),
                     const SizedBox(height: 40),
 
                     // Setup Form
@@ -226,19 +252,24 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Display Name',
-                                labelStyle: const TextStyle(color: Colors.white60),
-                                prefixIcon: const Icon(Icons.badge_outlined, color: Color(0xFF25D366)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white60),
+                                prefixIcon: const Icon(Icons.badge_outlined,
+                                    color: Color(0xFF25D366)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Color(0xFF25D366)),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFF25D366)),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                               ),
                             ),
@@ -251,19 +282,25 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Username',
-                                labelStyle: const TextStyle(color: Colors.white60),
-                                prefixIcon: const Icon(Icons.alternate_email_outlined, color: Color(0xFF25D366)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white60),
+                                prefixIcon: const Icon(
+                                    Icons.alternate_email_outlined,
+                                    color: Color(0xFF25D366)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Color(0xFF25D366)),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFF25D366)),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                               ),
                             ),
@@ -277,21 +314,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Phone Number (For Sync)',
-                                labelStyle: const TextStyle(color: Colors.white60),
-                                prefixIcon: const Icon(Icons.phone_outlined, color: Color(0xFF25D366)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white60),
+                                prefixIcon: const Icon(Icons.phone_outlined,
+                                    color: Color(0xFF25D366)),
                                 hintText: '+1234567890',
-                                hintStyle: const TextStyle(color: Colors.white24),
+                                hintStyle:
+                                    const TextStyle(color: Colors.white24),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Color(0xFF25D366)),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFF25D366)),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                               ),
                             ),
@@ -304,19 +347,24 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Status',
-                                labelStyle: const TextStyle(color: Colors.white60),
-                                prefixIcon: const Icon(Icons.info_outline, color: Color(0xFF25D366)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white60),
+                                prefixIcon: const Icon(Icons.info_outline,
+                                    color: Color(0xFF25D366)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Color(0xFF25D366)),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFF25D366)),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                  borderSide: const BorderSide(color: Colors.white10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white10),
                                 ),
                               ),
                             ),
@@ -341,7 +389,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           elevation: 0,
                         ),
                         child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
                             : const Text(
                                 'COMPLETE SETUP',
                                 style: TextStyle(

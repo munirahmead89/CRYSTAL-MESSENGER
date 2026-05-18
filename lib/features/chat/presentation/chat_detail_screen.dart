@@ -25,7 +25,7 @@ class ChatDetailScreen extends StatefulWidget {
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
-  
+
   // Audio Recording (Voice Notes)
   final _audioRecorder = AudioRecorder();
   bool _isRecording = false;
@@ -116,7 +116,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
       if (mounted) {
         setState(() {
-          _otherUserName = profile['full_name'] ?? profile['username'] ?? 'Crystal User';
+          _otherUserName =
+              profile['full_name'] ?? profile['username'] ?? 'Crystal User';
           _otherUserAvatar = profile['avatar_url'];
           _otherUserOnline = profile['is_online'] ?? false;
         });
@@ -128,7 +129,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   // Typing indicators: Stream updates
   void _listenToTypingIndicators() {
-    _typingSub = SupabaseService.getTypingStream(widget.roomId).listen((indicators) {
+    _typingSub =
+        SupabaseService.getTypingStream(widget.roomId).listen((indicators) {
       if (!mounted || _otherUserId == null) return;
 
       final matches = indicators.where((t) => t['user_id'] == _otherUserId);
@@ -142,14 +144,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
       final bool isTypingNow = otherTypingState['is_typing'] ?? false;
       final DateTime updatedAt = DateTime.parse(otherTypingState['updated_at']);
-      
+
       // Typing indicator expires if not updated in 6 seconds
       final bool isExpired = DateTime.now().difference(updatedAt).inSeconds > 6;
 
       setState(() {
         _otherUserTyping = isTypingNow && !isExpired;
       });
-        });
+    });
   }
 
   // Mark all incoming messages in this chat as read
@@ -193,7 +195,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 children: [
                   const Text(
                     'Share Secure Content',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white70),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white70),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -253,13 +258,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
               shape: BoxShape.circle,
-              border: Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
+              border:
+                  Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
             ),
             child: Icon(icon, color: color, size: 28),
           ),
         ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.white70)),
+        Text(label,
+            style: const TextStyle(fontSize: 12, color: Colors.white70)),
       ],
     );
   }
@@ -272,13 +279,19 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       if (picked == null) return;
 
       final file = File(picked.path);
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Row(children: [CircularProgressIndicator(), SizedBox(width: 15), Text('Uploading photo...')])),
+        const SnackBar(
+            content: Row(children: [
+          CircularProgressIndicator(),
+          SizedBox(width: 15),
+          Text('Uploading photo...')
+        ])),
       );
 
-      final url = await SupabaseService.uploadMedia(file, 'photos/${widget.roomId}');
+      final url =
+          await SupabaseService.uploadMedia(file, 'photos/${widget.roomId}');
       if (!mounted) return;
       if (url != null) {
         await SupabaseService.sendMessage(
@@ -289,7 +302,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Upload failed: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Upload failed: $e')));
     }
   }
 
@@ -304,13 +318,20 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       if (result == null || result.files.single.path == null) return;
 
       final file = File(result.files.single.path!);
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Row(children: [CircularProgressIndicator(), SizedBox(width: 15), Text('Uploading document...')])),
+        const SnackBar(
+            content: Row(children: [
+          CircularProgressIndicator(),
+          SizedBox(width: 15),
+          Text('Uploading document...')
+        ])),
       );
 
-      final url = await SupabaseService.uploadMedia(file, 'documents/${widget.roomId}', bucket: 'media');
+      final url = await SupabaseService.uploadMedia(
+          file, 'documents/${widget.roomId}',
+          bucket: 'media');
       if (!mounted) return;
       if (url != null) {
         await SupabaseService.sendMessage(
@@ -322,7 +343,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Document upload failed: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Document upload failed: $e')));
     }
   }
 
@@ -331,7 +353,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     try {
       if (await _audioRecorder.hasPermission()) {
         final directory = await getTemporaryDirectory();
-        final path = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+        final path =
+            '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
         await _audioRecorder.start(
           const RecordConfig(encoder: AudioEncoder.aacLc),
@@ -345,7 +368,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             final minutes = diff.inMinutes;
             final seconds = diff.inSeconds % 60;
             setState(() {
-              _recordingDurationText = '$minutes:${seconds.toString().padLeft(2, '0')}';
+              _recordingDurationText =
+                  '$minutes:${seconds.toString().padLeft(2, '0')}';
             });
           }
         });
@@ -358,7 +382,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Microphone error: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Microphone error: $e')));
     }
   }
 
@@ -374,10 +399,17 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         if (await file.exists()) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Row(children: [CircularProgressIndicator(), SizedBox(width: 15), Text('Sending voice note...')])),
+            const SnackBar(
+                content: Row(children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 15),
+              Text('Sending voice note...')
+            ])),
           );
 
-          final url = await SupabaseService.uploadMedia(file, 'audio/${widget.roomId}', bucket: 'media');
+          final url = await SupabaseService.uploadMedia(
+              file, 'audio/${widget.roomId}',
+              bucket: 'media');
           if (url != null) {
             await SupabaseService.sendMessage(
               roomId: widget.roomId,
@@ -389,7 +421,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to record: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to record: $e')));
     }
   }
 
@@ -407,7 +440,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   void _initiateCall(CallType type) {
     if (_otherUserId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Call dialing unavailable: Recipient profile syncing...'), backgroundColor: Colors.redAccent),
+        const SnackBar(
+            content:
+                Text('Call dialing unavailable: Recipient profile syncing...'),
+            backgroundColor: Colors.redAccent),
       );
       return;
     }
@@ -424,7 +460,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     if (_messageController.text.trim().isEmpty) return;
     final text = _messageController.text;
     _messageController.clear();
-    
+
     // Stop typing indicators immediately
     _typingDebounce?.cancel();
     _isTyping = false;
@@ -434,7 +470,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       await SupabaseService.sendMessage(roomId: widget.roomId, content: text);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Send failed: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Send failed: $e')));
     }
   }
 
@@ -459,8 +496,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: const Color(0xFF1a1a1a),
-                  backgroundImage: _otherUserAvatar != null ? NetworkImage(_otherUserAvatar!) : null,
-                  child: _otherUserAvatar == null ? const Icon(Icons.person, color: Colors.white54, size: 20) : null,
+                  backgroundImage: _otherUserAvatar != null
+                      ? NetworkImage(_otherUserAvatar!)
+                      : null,
+                  child: _otherUserAvatar == null
+                      ? const Icon(Icons.person,
+                          color: Colors.white54, size: 20)
+                      : null,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -470,19 +512,24 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     children: [
                       Text(
                         _otherUserName,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _otherUserTyping 
-                            ? 'typing...' 
+                        _otherUserTyping
+                            ? 'typing...'
                             : (_otherUserOnline ? 'online' : 'offline'),
                         style: TextStyle(
-                          fontSize: 11, 
-                          color: _otherUserTyping 
-                              ? const Color(0xFF25D366) 
+                          fontSize: 11,
+                          color: _otherUserTyping
+                              ? const Color(0xFF25D366)
                               : Colors.white30,
-                          fontWeight: _otherUserTyping ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: _otherUserTyping
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
                     ],
@@ -492,7 +539,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.videocam_outlined, color: Colors.white70),
+                icon:
+                    const Icon(Icons.videocam_outlined, color: Colors.white70),
                 onPressed: () => _initiateCall(CallType.video),
               ),
               IconButton(
@@ -511,7 +559,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               color: const Color(0xFF070c0e),
             ),
           ),
-          
+
           Column(
             children: [
               Expanded(
@@ -520,13 +568,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   builder: (context, snapshot) {
                     // Update cache when new stream database packages arrive
                     if (snapshot.hasData) {
-                      final newMessages = snapshot.data!.map((m) => MessageModel.fromJson(m)).toList();
-                      
+                      final newMessages = snapshot.data!
+                          .map((m) => MessageModel.fromJson(m))
+                          .toList();
+
                       // Cache asynchronous arrivals locally in Hive
                       for (final msg in newMessages) {
-                        HiveService.instance.cacheMessage(widget.roomId, msg.toJson());
+                        HiveService.instance
+                            .cacheMessage(widget.roomId, msg.toJson());
                       }
-                      
+
                       _cachedMessages = newMessages;
                     }
 
@@ -540,7 +591,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     }
 
                     // Render sorted messages
-                    final displayList = List<MessageModel>.from(_cachedMessages);
+                    final displayList =
+                        List<MessageModel>.from(_cachedMessages);
 
                     return ListView.builder(
                       reverse: true,
@@ -548,8 +600,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       itemCount: displayList.length,
                       itemBuilder: (context, index) {
                         final msg = displayList[displayList.length - 1 - index];
-                        final bool isMe = msg.senderId == SupabaseService.auth.currentUser?.id;
-                        
+                        final bool isMe = msg.senderId ==
+                            SupabaseService.auth.currentUser?.id;
+
                         return _buildMessageBubble(msg, isMe);
                       },
                     );
@@ -565,7 +618,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     padding: const EdgeInsets.fromLTRB(24, 4, 16, 8),
                     child: Text(
                       '$_otherUserName is typing...',
-                      style: const TextStyle(color: Color(0xFF25D366), fontSize: 11, fontStyle: FontStyle.italic),
+                      style: const TextStyle(
+                          color: Color(0xFF25D366),
+                          fontSize: 11,
+                          fontStyle: FontStyle.italic),
                     ),
                   ),
                 ),
@@ -586,15 +642,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Container(
-          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75),
           child: GlassContainer(
             blur: 5,
-            color: isMe 
-                ? const Color(0xFF075E54).withValues(alpha: 0.45) 
+            color: isMe
+                ? const Color(0xFF075E54).withValues(alpha: 0.45)
                 : Colors.white.withValues(alpha: 0.05),
             border: Border.all(
-              color: isMe 
-                  ? const Color(0xFF075E54).withValues(alpha: 0.3) 
+              color: isMe
+                  ? const Color(0xFF075E54).withValues(alpha: 0.3)
                   : Colors.white10,
             ),
             borderRadius: BorderRadius.only(
@@ -616,16 +673,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       const Spacer(),
                       Text(
                         '${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}',
-                        style: const TextStyle(fontSize: 9, color: Colors.white30),
+                        style:
+                            const TextStyle(fontSize: 9, color: Colors.white30),
                       ),
                       if (isMe) ...[
                         const SizedBox(width: 4),
                         Icon(
                           Icons.done_all,
                           size: 14,
-                          color: msg.isRead 
-                              ? Colors.blueAccent 
-                              : Colors.white30,
+                          color:
+                              msg.isRead ? Colors.blueAccent : Colors.white30,
                         ),
                       ],
                     ],
@@ -651,7 +708,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               return const SizedBox(
                 width: 150,
                 height: 150,
-                child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF25D366))),
+                child: Center(
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: Color(0xFF25D366))),
               );
             },
           ),
@@ -665,7 +724,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             Expanded(
               child: Text(
                 msg.textContent ?? 'Document',
-                style: const TextStyle(color: Colors.white70, fontSize: 14, decoration: TextDecoration.underline),
+                style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    decoration: TextDecoration.underline),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -709,17 +771,24 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       child: _isRecording
                           ? Row(
                               children: [
-                                const Icon(Icons.fiber_manual_record, color: Colors.redAccent, size: 16)
-                                    .animate(onPlay: (controller) => controller.repeat())
+                                const Icon(Icons.fiber_manual_record,
+                                        color: Colors.redAccent, size: 16)
+                                    .animate(
+                                        onPlay: (controller) =>
+                                            controller.repeat())
                                     .fadeOut(duration: 800.ms),
                                 const SizedBox(width: 8),
                                 Text(
                                   'Recording Voice Note: $_recordingDurationText',
-                                  style: const TextStyle(color: Colors.redAccent, fontSize: 13, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      color: Colors.redAccent,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 const Spacer(),
                                 IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.white54),
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.white54),
                                   onPressed: _cancelRecording,
                                 ),
                               ],
@@ -730,15 +799,18 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                               style: const TextStyle(color: Colors.white),
                               decoration: const InputDecoration(
                                 hintText: 'Message...',
-                                hintStyle: TextStyle(color: Colors.white30, fontSize: 15),
+                                hintStyle: TextStyle(
+                                    color: Colors.white30, fontSize: 15),
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(vertical: 12),
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 12),
                               ),
                             ),
                     ),
                     if (!_isRecording)
                       IconButton(
-                        icon: const Icon(Icons.camera_alt, color: Colors.white70),
+                        icon:
+                            const Icon(Icons.camera_alt, color: Colors.white70),
                         onPressed: () => _pickMedia(ImageSource.camera),
                       ),
                   ],
@@ -747,7 +819,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          
+
           // Send / Mic Circle Floating Button
           GestureDetector(
             onLongPressStart: (_) => _startRecording(),
@@ -761,9 +833,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                _isRecording 
-                    ? Icons.send 
-                    : (_messageController.text.trim().isEmpty ? Icons.mic : Icons.send),
+                _isRecording
+                    ? Icons.send
+                    : (_messageController.text.trim().isEmpty
+                        ? Icons.mic
+                        : Icons.send),
                 color: Colors.white,
                 size: 24,
               ),
@@ -797,7 +871,7 @@ class _VoiceNoteBubbleState extends State<VoiceNoteBubble> {
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
-    
+
     _durSub = _audioPlayer.onDurationChanged.listen((d) {
       if (mounted) setState(() => _duration = d);
     });
@@ -838,15 +912,16 @@ class _VoiceNoteBubbleState extends State<VoiceNoteBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final double progress = _duration.inMilliseconds > 0 
-        ? _position.inMilliseconds / _duration.inMilliseconds 
+    final double progress = _duration.inMilliseconds > 0
+        ? _position.inMilliseconds / _duration.inMilliseconds
         : 0.0;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow, color: const Color(0xFF25D366), size: 28),
+          icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow,
+              color: const Color(0xFF25D366), size: 28),
           onPressed: _togglePlay,
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),
@@ -859,8 +934,10 @@ class _VoiceNoteBubbleState extends State<VoiceNoteBubble> {
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   trackHeight: 2.0,
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 14.0),
+                  thumbShape:
+                      const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  overlayShape:
+                      const RoundSliderOverlayShape(overlayRadius: 14.0),
                   activeTrackColor: const Color(0xFF25D366),
                   inactiveTrackColor: Colors.white24,
                   thumbColor: const Color(0xFF25D366),
@@ -868,7 +945,8 @@ class _VoiceNoteBubbleState extends State<VoiceNoteBubble> {
                 child: Slider(
                   value: progress.clamp(0.0, 1.0),
                   onChanged: (val) async {
-                    final newPos = Duration(milliseconds: (val * _duration.inMilliseconds).toInt());
+                    final newPos = Duration(
+                        milliseconds: (val * _duration.inMilliseconds).toInt());
                     await _audioPlayer.seek(newPos);
                   },
                 ),
@@ -878,11 +956,13 @@ class _VoiceNoteBubbleState extends State<VoiceNoteBubble> {
                 children: [
                   Text(
                     '${_position.inMinutes}:${(_position.inSeconds % 60).toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
+                    style:
+                        const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
                   ),
                   Text(
                     '${_duration.inMinutes}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
+                    style:
+                        const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
                   ),
                 ],
               ),

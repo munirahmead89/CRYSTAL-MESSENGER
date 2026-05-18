@@ -60,7 +60,8 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.diamond_outlined, size: 80, color: Colors.white),
+                  child: const Icon(Icons.diamond_outlined,
+                      size: 80, color: Colors.white),
                 ).animate().scale(duration: 800.ms, curve: Curves.elasticOut),
                 const SizedBox(height: 40),
                 Text(
@@ -110,12 +111,14 @@ class WelcomeScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       elevation: 0,
                     ),
                     child: const Text(
                       'AGREE AND CONTINUE',
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                     ),
                   ),
                 ).animate().fadeIn(delay: 800.ms).moveY(begin: 30, end: 0),
@@ -128,4 +131,3 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
-

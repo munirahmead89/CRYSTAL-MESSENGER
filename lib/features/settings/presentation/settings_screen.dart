@@ -39,16 +39,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1a1a1a),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Sign Out', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        content: const Text('Are you sure you want to sign out?', style: TextStyle(color: Colors.white70)),
+        title: const Text('Sign Out',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        content: const Text('Are you sure you want to sign out?',
+            style: TextStyle(color: Colors.white70)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('CANCEL', style: TextStyle(color: Colors.white54)),
+            child:
+                const Text('CANCEL', style: TextStyle(color: Colors.white54)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('SIGN OUT', style: TextStyle(color: Colors.redAccent)),
+            child: const Text('SIGN OUT',
+                style: TextStyle(color: Colors.redAccent)),
           ),
         ],
       ),
@@ -76,20 +80,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String displayName = _profile?['full_name'] ?? _profile?['username'] ?? 'Crystal User';
-    final String email       = SupabaseService.auth.currentUser?.email ?? '';
-    final String? avatar     = _profile?['avatar_url'];
-    final String status      = _profile?['status'] ?? 'Hey there!';
-    final bool   isPremium   = _profile?['is_premium'] ?? false;
+    final String displayName =
+        _profile?['full_name'] ?? _profile?['username'] ?? 'Crystal User';
+    final String email = SupabaseService.auth.currentUser?.email ?? '';
+    final String? avatar = _profile?['avatar_url'];
+    final String status = _profile?['status'] ?? 'Hey there!';
+    final bool isPremium = _profile?['is_premium'] ?? false;
 
     return Scaffold(
       body: Stack(
         children: [
           // Ambient glow
           Positioned(
-            top: -60, right: -60,
+            top: -60,
+            right: -60,
             child: Container(
-              width: 240, height: 240,
+              width: 240,
+              height: 240,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: const Color(0xFF075E54).withValues(alpha: 0.12),
@@ -103,16 +110,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 // ── AppBar ───────────────────────────────────────────────────
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70),
+                        icon: const Icon(Icons.arrow_back_ios_new,
+                            color: Colors.white70),
                         onPressed: () => context.pop(),
                       ),
                       const Text(
                         'Settings',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ],
                   ),
@@ -120,9 +132,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 Expanded(
                   child: _isLoading
-                      ? const Center(child: CircularProgressIndicator(color: Color(0xFF25D366)))
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                              color: Color(0xFF25D366)))
                       : ListView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           children: [
                             // ── Profile Card ──────────────────────────────────
                             GlassContainer(
@@ -138,24 +153,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       children: [
                                         CircleAvatar(
                                           radius: 34,
-                                          backgroundColor: const Color(0xFF1a1a1a),
+                                          backgroundColor:
+                                              const Color(0xFF1a1a1a),
                                           backgroundImage: avatar != null
-                                              ? CachedNetworkImageProvider(avatar)
+                                              ? CachedNetworkImageProvider(
+                                                  avatar)
                                               : null,
                                           child: avatar == null
-                                              ? const Icon(Icons.person, color: Colors.white38, size: 34)
+                                              ? const Icon(Icons.person,
+                                                  color: Colors.white38,
+                                                  size: 34)
                                               : null,
                                         ),
                                         if (isPremium)
                                           Positioned(
-                                            bottom: 0, right: 0,
+                                            bottom: 0,
+                                            right: 0,
                                             child: Container(
                                               padding: const EdgeInsets.all(3),
                                               decoration: const BoxDecoration(
                                                 color: Colors.amber,
                                                 shape: BoxShape.circle,
                                               ),
-                                              child: const Icon(Icons.star, size: 12, color: Colors.white),
+                                              child: const Icon(Icons.star,
+                                                  size: 12,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                       ],
@@ -163,7 +185,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     const SizedBox(width: 16),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             displayName,
@@ -176,21 +199,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           const SizedBox(height: 2),
                                           Text(
                                             email,
-                                            style: const TextStyle(color: Color(0x80FFFFFF), fontSize: 12),
+                                            style: const TextStyle(
+                                                color: Color(0x80FFFFFF),
+                                                fontSize: 12),
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
                                             status,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(color: Colors.white38, fontSize: 12),
+                                            style: const TextStyle(
+                                                color: Colors.white38,
+                                                fontSize: 12),
                                           ),
                                         ],
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.edit_outlined, color: Color(0xFF25D366)),
-                                      onPressed: () => context.push('/profile-setup'),
+                                      icon: const Icon(Icons.edit_outlined,
+                                          color: Color(0xFF25D366)),
+                                      onPressed: () =>
+                                          context.push('/profile-setup'),
                                     ),
                                   ],
                                 ),
@@ -205,22 +234,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.star_rounded,
                               iconColor: Colors.amber,
                               title: 'Crystal Premium',
-                              subtitle: isPremium ? 'Founder status active' : 'Unlock exclusive features',
+                              subtitle: isPremium
+                                  ? 'Founder status active'
+                                  : 'Unlock exclusive features',
                               onTap: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => const PremiumDashboard()),
+                                MaterialPageRoute(
+                                    builder: (_) => const PremiumDashboard()),
                               ),
                               trailing: isPremium
                                   ? Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 3),
                                       decoration: BoxDecoration(
-                                        color: Colors.amber.withValues(alpha: 0.15),
+                                        color: Colors.amber
+                                            .withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.amber.withValues(alpha: 0.5)),
+                                        border: Border.all(
+                                            color: Colors.amber
+                                                .withValues(alpha: 0.5)),
                                       ),
                                       child: const Text(
                                         'ACTIVE',
-                                        style: TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: Colors.amber,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     )
                                   : null,
@@ -265,7 +304,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               child: Text(
                                 'Crystal Messenger  v1.1.0\nBuilt by Munir Waheed',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.white24, fontSize: 11, height: 1.7),
+                                style: const TextStyle(
+                                    color: Colors.white24,
+                                    fontSize: 11,
+                                    height: 1.7),
                               ),
                             ),
                           ],
@@ -312,7 +354,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         leading: Container(
-          width: 40, height: 40,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
             color: iconColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
@@ -327,8 +370,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             fontSize: 15,
           ),
         ),
-        subtitle: Text(subtitle, style: const TextStyle(color: Colors.white38, fontSize: 12)),
-        trailing: trailing ?? const Icon(Icons.chevron_right, color: Colors.white24),
+        subtitle: Text(subtitle,
+            style: const TextStyle(color: Colors.white38, fontSize: 12)),
+        trailing:
+            trailing ?? const Icon(Icons.chevron_right, color: Colors.white24),
         onTap: onTap,
       ),
     );
