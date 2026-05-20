@@ -1,59 +1,31 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'app.dart';
-import 'core/services/hive_service.dart';
-import 'core/services/supabase_service.dart';
-import 'core/services/notification_service.dart';
-import 'core/services/admob_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'src/app.dart';
+import 'src/core/logger.dart';
 
-Future<void> _initializeApp() async {
-  // Ensure Flutter binding is initialized
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables safely.
-  try {
-    await dotenv.load(fileName: '.env');
-    debugPrint('[Init] Environment variables loaded successfully');
-  } catch (e) {
-    debugPrint('[Init] .env load error: $e - Using default configurations');
-  }
+  // Load .env for local dev (SUPABASE_URL, SUPABASE_ANON_KEY, ADMOB_* etc)
+  await dotenv.load(fileName: ".env");
 
-  // Initialise essential services with graceful degradation.
-  try {
-    await HiveService.instance.init();
-    debugPrint('[Init] Hive service initialized');
-  } catch (e) {
-    debugPrint('[Init] Hive service init failed: $e');
-  }
+  // Initialize Hive for local caching
+  await Hive.initFlutter();
+  // Register adapters here if you create Hive types
+  // Hive.registerAdapter(MessageAdapter());
 
-  try {
-    await SupabaseService.init();
-    debugPrint('[Init] Supabase service initialized');
-  } catch (e) {
-    debugPrint(
-        '[Init] Supabase init failed: $e - App may not function properly without backend');
-  }
+  // Global error handling
+  FlutterError.onError = (details) {
+    AppLogger.e('FlutterError', details.exceptionAsString());
+    FlutterError.dumpErrorToConsole(details);
+  };
 
-  try {
-    await NotificationService.instance.initialize();
-    debugPrint('[Init] Notification service initialized');
-  } catch (e) {
-    debugPrint(
-        '[Init] Notification init failed: $e - Push notifications may not work');
-  }
-
-  try {
-    await AdMobService.instance.initialize();
-    debugPrint('[Init] AdMob service initialized');
-  } catch (e) {
-    debugPrint('[Init] AdMob init failed: $e - Ads will not display');
-  }
-
-  debugPrint('[Init] All services initialized with graceful degradation');
-}
-
-void main() async {
-  await _initializeApp();
-  runApp(const ProviderScope(child: CrystalMessengerApp()));
+  await runZonedGuarded(() async {
+    runApp(const ProviderScope(child: CrystalApp()));
+  }, (error, stack) {
+    AppLogger.e('Uncaught zone error', error.toString());
+  });
 }
