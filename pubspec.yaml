@@ -17,9 +17,6 @@ dependencies:
   # WebRTC
   flutter_webrtc: ^0.9.18
 
-  # Ads
-  google_mobile_ads: ^3.2.0
-
   # Storage / media
   image_picker: ^0.8.7+5
   file_picker: ^5.2.5
