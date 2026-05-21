@@ -23,14 +23,12 @@ android {
 
     defaultConfig {
         applicationId = "com.example.crystal_messenger"
-        // flutter_webrtc, google_mobile_ads, and flutter_contacts require minSdk 21
+        // flutter_webrtc requires minSdk 21
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
-        // AdMob App ID
-        manifestPlaceholders["adMobAppId"] = "ca-app-pub-5375584696804538~8182284522"
     }
 
     buildTypes {
@@ -62,7 +60,7 @@ android {
 }
 
 flutter {
-    source = "../.."
+    source = "../../.."
 }
 
 dependencies {

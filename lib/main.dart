@@ -9,7 +9,7 @@ import 'src/core/logger.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load .env for local dev (SUPABASE_URL, SUPABASE_ANON_KEY, ADMOB_* etc)
+  // Load .env for local dev (SUPABASE_URL, SUPABASE_ANON_KEY, etc)
   await dotenv.load(fileName: ".env");
 
   // Initialize Hive for local caching
